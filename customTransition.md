@@ -12,7 +12,7 @@ class VCMain: UIViewController {
         vcYellow.startFrame = self.btnTapMe.frame;
         self.present(vcYellow, animated: true, completion: nil)
     }
-	```
+```
 А *VCYellow* в свою очередь скрывался при помощи единственной кнопки "X", которой он, кстати говоря, очень гордился:
 
 ```swift
