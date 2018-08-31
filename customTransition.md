@@ -67,7 +67,7 @@ override func viewDidLoad() {
 Попросил он своего друга VCMain презентануть себя ещё разок, что бы проверить как магия сработает и… сработала она никак…
 Оказалось, что AnimatorPresent и AnimatorDismiss сами собой не появляются, а следовательно магический сеанс не состоялся.
 
-Останавливаться было уже поздно и наш герой решил создать недостающие аниматоры. Поковырялся в нужном разделе [древних свитков] (https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) и узнал, что  
+Останавливаться было уже поздно и наш герой решил создать необходимые аниматоры. Поковырялся в нужном разделе [древних свитков] (https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) и узнал, что  
 
 во-первых надо задать время, отведённое на анимацию:
 
@@ -81,6 +81,7 @@ func transitionDuration(using transitionContext: UIViewControllerContextTransiti
 а во-вторых обозначить саму анимацию:
 
 ```swift
+
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         //1
 		guard let vcTo = transitionContext.viewController(forKey: .to),
@@ -128,7 +129,96 @@ func transitionDuration(using transitionContext: UIViewControllerContextTransiti
 5) Расщеперить фотку на весь экран, тем самым анимировав процесс презентации
 	
 6) После окончания анимации показать настоящую вьюху конечного контроллера, 
-избавиться от фотки и сообщить контекст, что действо окончено.
+избавиться от фотки и сообщить, что действо окончено.
+
+
+
+В результате вышел вот такой аниматор для показа:
+
+```swift
+import UIKit
+
+class AnimatorPresent: NSObject, UIViewControllerAnimatedTransitioning {
+    
+    let startFrame: CGRect
+    
+    init(startFrame: CGRect) {
+        self.startFrame = startFrame
+    }
+    
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return 0.3
+    }
+    
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        guard let vcTo = transitionContext.viewController(forKey: .to),
+            let snapshot = vcTo.view.snapshotView(afterScreenUpdates: true) else {
+            return
+        }
+        
+        let vContainer = transitionContext.containerView
+        
+        vcTo.view.isHidden = true
+        vContainer.addSubview(vcTo.view)
+        
+        snapshot.frame = self.startFrame
+        vContainer.addSubview(snapshot)
+        
+        
+        UIView.animate(withDuration: 0.3,
+                       animations: {
+            snapshot.frame = (transitionContext.finalFrame(for: vcTo))
+        }, completion: { success in
+            vcTo.view.isHidden = false
+            snapshot.removeFromSuperview()
+            transitionContext.completeTransition(true)
+        })
+    }
+}
+```
+
+А после этого несложно было описать аниматор для скрывания, который делает тпримерно о же самое, но наоборот:
+
+```swift
+import UIKit
+
+class AnimatorDismiss: NSObject, UIViewControllerAnimatedTransitioning {
+    
+    let endFrame: CGRect
+    
+    init(endFrame: CGRect) {
+        self.endFrame = endFrame
+    }
+    
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return 0.3
+    }
+    
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        guard let vcTo = transitionContext.viewController(forKey: .to),
+            let vcFrom = transitionContext.viewController(forKey: .from),
+            let snapshot = vcFrom.view.snapshotView(afterScreenUpdates: true) else {
+            return
+        }
+        
+        let vContainer = transitionContext.containerView
+        vContainer.addSubview(vcTo.view)
+        vContainer.addSubview(snapshot)
+        
+        vcFrom.view.isHidden = true
+
+        UIView.animate(withDuration: 0.3,
+                       animations: {
+            snapshot.frame = self.endFrame
+        }, completion: { success in
+            transitionContext.completeTransition(true)
+        })
+    }
+}
+```
+
+
+
 
 
 
