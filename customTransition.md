@@ -104,7 +104,7 @@ func animateTransition(using transitionContext: UIViewControllerContextTransitio
         
 //4
 //Подготовить фотку для анимации. Сжать до начальных размеров и кинуть на контекст.
-		snapshot.frame = self.startFrame
+	snapshot.frame = self.startFrame
         vContainer.addSubview(snapshot)
         
         UIView.animate(withDuration: 0.3,
@@ -114,11 +114,11 @@ func animateTransition(using transitionContext: UIViewControllerContextTransitio
 	//Расщеперить фотку на весь экран, тем самым анимировав процесс презентации			   
             snapshot.frame = (transitionContext.finalFrame(for: vcTo))
         
-		}, completion: { success in
+	}, completion: { success in
 		
 	//6
 	//После окончания анимации показать настоящую вьюху конечного контроллера, избавиться от фотки и сообщить контекст, что действо окончено.
-			vcTo.view.isHidden = false
+		vcTo.view.isHidden = false
             snapshot.removeFromSuperview()
             transitionContext.completeTransition(true)
         
