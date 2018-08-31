@@ -230,6 +230,6 @@ class AnimatorDismiss: NSObject, UIViewControllerAnimatedTransitioning {
 
 Проект-пример можно скачать [тут](https://github.com/funkydevil/customTransition)
 
-Статья, которую я использовал для вдохновения находится [тут] (https://www.raywenderlich.com/322-custom-uiviewcontroller-transitions-getting-started)
+Статья, которую я использовал для вдохновения находится [тут](https://www.raywenderlich.com/322-custom-uiviewcontroller-transitions-getting-started)
 
 
