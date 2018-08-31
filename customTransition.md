@@ -65,10 +65,11 @@ override func viewDidLoad() {
     }
 ```
 Попросил он своего друга VCMain презентануть себя ещё разок, что бы проверить как магия сработает и… сработала она никак…
-Оказалось что AnimatorPresent и AnimatorDismiss сами собой не появляются, а следовательно магический сеанс красивого появляения не состоялся.
+Оказалось, что AnimatorPresent и AnimatorDismiss сами собой не появляются, а следовательно магический сеанс не состоялся.
 
-Останавливаться было уже поздно и наш герой решил создать недостающие аниматоры. Поковырялся в нужном разделе [древних свитков] (https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) 
-и узнал что надо во-первых задать время, отведённое на анимацию:
+Останавливаться было уже поздно и наш герой решил создать недостающие аниматоры. Поковырялся в нужном разделе [древних свитков] (https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) и узнал, что  
+
+во-первых надо задать время, отведённое на анимацию:
 
 ```swift
 func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -81,37 +82,54 @@ func transitionDuration(using transitionContext: UIViewControllerContextTransiti
 
 ```swift
 func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+
         //1
+		//вытащить презентуемый вью-контроллер(в нашем случаей VCYellow) и сфоткать его. Фотка нужна для крутой анимации.
 		guard let vcTo = transitionContext.viewController(forKey: .to),
             let snapshot = vcTo.view.snapshotView(afterScreenUpdates: true) else {
             return
         }
         
+		
 		//2
+		//Получить вьюшку, на которой будет происходить анимационное колдунство. Назовем её контекст.
         let vContainer = transitionContext.containerView
         
+		
 		//3
+		//Нацепить вьюху конечного контроллера на контекст и скрыть её. Показать её было решено после того как закончится анимация
         vcTo.view.isHidden = true
         vContainer.addSubview(vcTo.view)
         
-        //4
+        
+		//4
+		//Подготовить фотку для анимации. Сжать до начальных размеров и кинуть на контекст.
 		snapshot.frame = self.startFrame
         vContainer.addSubview(snapshot)
         
         UIView.animate(withDuration: 0.3,
                        animations: {
-			//5			   
+		
+			//5
+			//Расщеперить фотку на весь экран, тем самым анимировав процесс презентации			   
             snapshot.frame = (transitionContext.finalFrame(for: vcTo))
-        }, completion: { success in
+        
+		}, completion: { success in
+		
 			//6
+			//После окончания анимации показать настоящую вьюху конечного контроллера, избавиться от фотки и сообщить контекст, что действо окончено.
 			vcTo.view.isHidden = false
             snapshot.removeFromSuperview()
             transitionContext.completeTransition(true)
-        })
+        
+		})
     }
 ```
 
-Тут в //1 
+
+
+
+
 
 
 
