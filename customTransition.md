@@ -85,7 +85,7 @@ func animateTransition(using transitionContext: UIViewControllerContextTransitio
 
 //1
 //вытащить презентуемый вью-контроллер(в нашем случаей VCYellow) и сфоткать его. Фотка нужна для крутой анимации.
-		guard let vcTo = transitionContext.viewController(forKey: .to),
+	guard let vcTo = transitionContext.viewController(forKey: .to),
             let snapshot = vcTo.view.snapshotView(afterScreenUpdates: true) else {
             return
         }
