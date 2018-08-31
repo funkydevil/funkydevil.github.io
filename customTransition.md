@@ -224,7 +224,9 @@ class AnimatorDismiss: NSObject, UIViewControllerAnimatedTransitioning {
 
 ![](https://habrastorage.org/webt/ow/f1/jd/owf1jdk2uqqufbr_fzuntpwlovk.gif)
 
-Магия сработала! Теперь жизнь VCYellow никогда не будет прежней. Конец
+Магия сработала! Мечта VCYellow сбылась и жизнь его никогда не будет прежней :)
+
+Конец.
 
 
 Проект-пример можно скачать [тут](https://github.com/funkydevil/customTransition)
