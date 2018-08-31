@@ -81,6 +81,9 @@ func transitionDuration(using transitionContext: UIViewControllerContextTransiti
 а во-вторых обозначить саму анимацию:
 
 ```swift
+func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+
+//1
 //вытащить презентуемый вью-контроллер(в нашем случаей VCYellow) и сфоткать его. Фотка нужна для 
 //крутой анимации.
 
@@ -88,27 +91,29 @@ func transitionDuration(using transitionContext: UIViewControllerContextTransiti
         let snapshot = vcTo.view.snapshotView(afterScreenUpdates: true) else {
         return
     }
-```        
-```swift
+        
+		
 //2
 //Получить вьюшку, на которой будет происходить анимационное колдунство. 
 //Назовем её контекст.
-let vContainer = transitionContext.containerView
-```        
-```swift
+
+    let vContainer = transitionContext.containerView
+        
+		
 //3
 //Нацепить вьюху конечного контроллера на контекст и скрыть её. Показать 
 //её было решено после того как закончится анимация
+
     vcTo.view.isHidden = true
     vContainer.addSubview(vcTo.view)
-```	
-```swift
+        
+        
 //4
 //Подготовить фотку для анимации. Сжать до начальных размеров и кинуть на контекст.
-snapshot.frame = self.startFrame
-vContainer.addSubview(snapshot)
-```
-```swift
+
+	snapshot.frame = self.startFrame
+    vContainer.addSubview(snapshot)
+        
     UIView.animate(withDuration: 0.3, animations: {
 		
 	//5
