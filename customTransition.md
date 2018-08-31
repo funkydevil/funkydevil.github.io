@@ -1,3 +1,5 @@
+# ИСТОРИЯ ВЬЮ-КОНТРОЛЛЕРА, КОТОРЫЙ ХОТЕЛ ПОКАЗЫВАТЬСЯ КРАСИВО
+
 Жил был скромный вью контроллер *VCYellow*. И не было у него ни картинки, ни текста, ни даже малюсенькой бизнес логики. Жил он обычной вью-контроллероской жизнью. 
 <cut />
 Его товарищ вью-контроллер *VCMain* иногда презентовал его миру:
@@ -224,6 +226,8 @@ class AnimatorDismiss: NSObject, UIViewControllerAnimatedTransitioning {
 
 Магия сработала! Теперь жизнь VCYellow никогда не будет прежней. Конец
 
+
+Проект-пример можно скачать [тут](https://github.com/funkydevil/customTransition)
 
 Статья, которую я использовал для вдохновения находится [тут] (https://www.raywenderlich.com/322-custom-uiviewcontroller-transitions-getting-started)
 
