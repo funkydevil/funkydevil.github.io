@@ -218,8 +218,13 @@ class AnimatorDismiss: NSObject, UIViewControllerAnimatedTransitioning {
 ```
 
 
+Закончив все доделки, VCYellow опять попросил своего друга VCMain презентовать себя и о чудо! 
+
+![](https://habrastorage.org/webt/ow/f1/jd/owf1jdk2uqqufbr_fzuntpwlovk.gif)
+
+Магия сработала! Теперь жизнь VCYellow никогда не будет прежней. Конец
 
 
-
+Статья, которую я использовал для вдохновения находится [тут] (https://www.raywenderlich.com/322-custom-uiviewcontroller-transitions-getting-started)
 
 
