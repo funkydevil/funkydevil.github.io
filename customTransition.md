@@ -84,7 +84,8 @@ func transitionDuration(using transitionContext: UIViewControllerContextTransiti
 func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
 
 //1
-//вытащить презентуемый вью-контроллер(в нашем случаей VCYellow) и сфоткать его. Фотка нужна для крутой анимации.
+//вытащить презентуемый вью-контроллер(в нашем случаей VCYellow) и сфоткать его. Фотка нужна для 
+//крутой анимации.
 
 	guard let vcTo = transitionContext.viewController(forKey: .to),
         let snapshot = vcTo.view.snapshotView(afterScreenUpdates: true) else {
@@ -93,13 +94,15 @@ func animateTransition(using transitionContext: UIViewControllerContextTransitio
         
 		
 //2
-//Получить вьюшку, на которой будет происходить анимационное колдунство. Назовем её контекст.
+//Получить вьюшку, на которой будет происходить анимационное колдунство. 
+//Назовем её контекст.
 
     let vContainer = transitionContext.containerView
         
 		
 //3
-//Нацепить вьюху конечного контроллера на контекст и скрыть её. Показать её было решено после того как закончится анимация
+//Нацепить вьюху конечного контроллера на контекст и скрыть её. Показать 
+//её было решено после того как закончится анимация
 
     vcTo.view.isHidden = true
     vContainer.addSubview(vcTo.view)
@@ -121,7 +124,8 @@ func animateTransition(using transitionContext: UIViewControllerContextTransitio
 	}, completion: { success in
 		
 	//6
-	//После окончания анимации показать настоящую вьюху конечного контроллера, избавиться от фотки и сообщить контекст, что действо окончено.
+	//После окончания анимации показать настоящую вьюху конечного контроллера, 
+	//избавиться от фотки и сообщить контекст, что действо окончено.
 	
 		vcTo.view.isHidden = false
         snapshot.removeFromSuperview()
