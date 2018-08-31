@@ -85,6 +85,7 @@ func animateTransition(using transitionContext: UIViewControllerContextTransitio
 
 //1
 //вытащить презентуемый вью-контроллер(в нашем случаей VCYellow) и сфоткать его. Фотка нужна для крутой анимации.
+
 	guard let vcTo = transitionContext.viewController(forKey: .to),
         let snapshot = vcTo.view.snapshotView(afterScreenUpdates: true) else {
         return
@@ -93,30 +94,35 @@ func animateTransition(using transitionContext: UIViewControllerContextTransitio
 		
 //2
 //Получить вьюшку, на которой будет происходить анимационное колдунство. Назовем её контекст.
+
     let vContainer = transitionContext.containerView
         
 		
 //3
 //Нацепить вьюху конечного контроллера на контекст и скрыть её. Показать её было решено после того как закончится анимация
+
     vcTo.view.isHidden = true
     vContainer.addSubview(vcTo.view)
         
         
 //4
 //Подготовить фотку для анимации. Сжать до начальных размеров и кинуть на контекст.
+
 	snapshot.frame = self.startFrame
     vContainer.addSubview(snapshot)
         
     UIView.animate(withDuration: 0.3, animations: {
 		
 	//5
-	//Расщеперить фотку на весь экран, тем самым анимировав процесс презентации			   
+	//Расщеперить фотку на весь экран, тем самым анимировав процесс презентации	
+			   
         snapshot.frame = (transitionContext.finalFrame(for: vcTo))
         
 	}, completion: { success in
 		
 	//6
 	//После окончания анимации показать настоящую вьюху конечного контроллера, избавиться от фотки и сообщить контекст, что действо окончено.
+	
 		vcTo.view.isHidden = false
         snapshot.removeFromSuperview()
         transitionContext.completeTransition(true)
