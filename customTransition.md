@@ -12,7 +12,7 @@ class VCMain: UIViewController {
         vcYellow.startFrame = self.btnTapMe.frame;
         self.present(vcYellow, animated: true, completion: nil)
     }
-	```
+```
 А *VCYellow* в свою очередь скрывался при помощи единственной кнопки "X", которой он, кстати говоря, очень гордился:
 
 ```swift
@@ -69,7 +69,7 @@ override func viewDidLoad() {
 Попросил он своего друга VCMain презентануть себя ещё разок, что бы проверить как магия сработает и… сработала она никак…
 Оказалось, что AnimatorPresent и AnimatorDismiss сами собой не появляются, а следовательно магический сеанс не состоялся.
 
-Останавливаться было уже поздно и наш герой решил создать необходимые аниматоры. Поковырялся в нужном разделе [древних свитков] (https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) и узнал, что  
+Останавливаться было уже поздно и наш герой решил создать необходимые аниматоры. Поковырялся в нужном разделе [древних свитков](https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) и узнал, что  
 
 во-первых надо задать время, отведённое на анимацию:
 
@@ -179,7 +179,7 @@ class AnimatorPresent: NSObject, UIViewControllerAnimatedTransitioning {
 }
 ```
 
-А после этого несложно было описать аниматор для скрывания, который делает тпримерно о же самое, но наоборот:
+А после этого несложно было описать аниматор для скрывания, который делает примерно то же самое, но наоборот:
 
 ```swift
 import UIKit
@@ -228,9 +228,8 @@ class AnimatorDismiss: NSObject, UIViewControllerAnimatedTransitioning {
 
 Конец.
 
-
 Проект-пример можно скачать [тут](https://github.com/funkydevil/customTransition)
 
-Статья, которую я использовал для вдохновения находится [тут] (https://www.raywenderlich.com/322-custom-uiviewcontroller-transitions-getting-started)
+Статья, которую я использовал для вдохновения находится [тут](https://www.raywenderlich.com/322-custom-uiviewcontroller-transitions-getting-started)
 
 
