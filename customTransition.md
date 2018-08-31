@@ -8,11 +8,10 @@
 class VCMain: UIViewController {
 ...
 	@IBAction func onBtnTapMeTapped(_ sender: Any) {
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let vcYellow = sb.instantiateViewController(withIdentifier: "VCYellow") as! VCYellow
+        let vcYellow = self.storyboard!.instantiateViewController(withIdentifier: "VCYellow") as! VCYellow
+        vcYellow.startFrame = self.btnTapMe.frame;
         self.present(vcYellow, animated: true, completion: nil)
-    }
-```
+    }```
 А *VCYellow* в свою очередь скрывался при помощи единственной кнопки "X", которой он, кстати говоря, очень гордился:
 
 ```swift
