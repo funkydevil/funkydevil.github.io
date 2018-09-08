@@ -3,23 +3,23 @@
 Жил был скромный вью-контроллер *VCYellow*. И не было у него ни картинки, ни текста, ни даже малюсенькой бизнес логики. Жил он обычной вью-контроллерской жизнью.
 Его товарищ вью-контроллер *VCMain* иногда презентовал его миру:
 
-'''swift
+```swift
 class VCMain: UIViewController {
 ...
 @IBAction func onBtnTapMeTapped(_ sender: Any) {
 let vcYellow = self.storyboard!.instantiateViewController(withIdentifier: "VCYellow") as! VCYellow
 self.present(vcYellow, animated: true, completion: nil)
 }
-'''
+```
 А *VCYellow* в свою очередь скрывался при помощи единственной кнопки "X", которой он, кстати говоря, очень гордился:
 
-'''swift
+```swift
 class VCYellow: UIViewController {
 ...
 @IBAction func onBtnCloseTapped(_ sender: Any) {
 self.dismiss(animated: true, completion: nil)
 }
-'''
+```
 
 И выглядело это не то чтобы плохо, но скучно и обыденно:
 
@@ -30,14 +30,14 @@ self.dismiss(animated: true, completion: nil)
 ![](https://habrastorage.org/webt/ow/f1/jd/owf1jdk2uqqufbr_fzuntpwlovk.gif)
 
 Шли года... и так и осталась бы мечта мечтой, если бы не узнал *VCYellow* о магии под названием:
-'''
+```
 UIViewControllerTransitioningDelegate
-'''
+```
 А сила этой магии в том, что даёт она возможность подсунуть соответствующий аниматор для показа и для скрытия вью-контроллера. Как раз то, о чём мечтал наш контроллер.
 Прочитал он в [древних свитках](https://developer.apple.com/documentation/uikit/uiviewcontrollertransitioningdelegate) как использовать заклятие и начал готовиться.
 Записал себе шпаргалку с самим заклинанием, чтобы не забыть:
 
-'''swift
+```swift
 extension VCYellow: UIViewControllerTransitioningDelegate {
 func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 return AnimatorPresent(startFrame: self.startFrame)
@@ -47,19 +47,19 @@ func animationController(forDismissed dismissed: UIViewController) -> UIViewCont
 return AnimatorDismiss(endFrame: self.startFrame)
 }
 }
-'''
+```
 В ней он тщательно расписал, что для показа нужно использовать аниматор *AnimatorPresent*, а при закрытии *AnimatorDismiss*.
 Ну и в качестве помощи обоим аниматорам было решено передать фрейм главной кнопки из *VCMain*
 
 А потом и сам морально настроился. Потому как без правильного настроя, как известно, никакая магия не работает:
-'''swift
+```swift
 override func viewDidLoad() {
 super.viewDidLoad()
 
 self.modalPresentationStyle = .custom
 self.transitioningDelegate = self
 }
-'''
+```
 Попросил он своего друга *VCMain* презентануть себя, чтобы проверить как магия сработает и… сработала она никак…
 Оказалось, что AnimatorPresent и AnimatorDismiss сами собой не появляются.
 
@@ -67,15 +67,15 @@ self.transitioningDelegate = self
 
 Во-первых надо задать время, отведённое для анимации:
 
-'''swift
+```swift
 func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
 return 0.3
 }
-'''
+```
 
 а во-вторых обозначить саму анимацию:
 
-'''swift
+```swift
 
 func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
 //1
@@ -106,7 +106,7 @@ transitionContext.completeTransition(true)
 })
 }
 
-'''
+```
 
 1) вытащить презентуемый вью-контроллер(в нашем случае VCYellow) и сфоткать его. Фотка нужна для
 крутой анимации.
@@ -126,7 +126,7 @@ transitionContext.completeTransition(true)
 
 В результате вышел вот такой аниматор для показа:
 
-'''swift
+```swift
 import UIKit
 
 class AnimatorPresent: NSObject, UIViewControllerAnimatedTransitioning {
@@ -164,11 +164,11 @@ transitionContext.completeTransition(true)
 })
 }
 }
-'''
+```
 
 А после этого несложно было описать аниматор для скрывания, который делает примерно то же самое, но наоборот:
 
-'''swift
+```swift
 import UIKit
 
 class AnimatorDismiss: NSObject, UIViewControllerAnimatedTransitioning {
@@ -204,7 +204,7 @@ transitionContext.completeTransition(true)
 })
 }
 }
-'''
+```
 
 Закончив все доделки, *VCYellow* опять попросил своего друга *VCMain* презентовать себя и о чудо!
 
