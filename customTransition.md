@@ -27,7 +27,7 @@ class VCYellow: UIViewController {
 ![](https://habrastorage.org/webt/fb/lf/op/fblfopvr4h0lp2dyltbjqhled64.gif)
 
 
-Но была у нашего героя мечта научиться показываться и скрываться диковенным образом. Да таким, чтобы можно было эту красоту менять потом по праздникам или просто в честь хорошего настроения.
+Но была у нашего героя мечта научиться показываться и скрываться по-красоте. Да так, чтобы можно было эту красоту менять потом по праздникам или просто в честь хорошего настроения.
 
 ![](https://habrastorage.org/webt/ow/f1/jd/owf1jdk2uqqufbr_fzuntpwlovk.gif)
 
@@ -51,8 +51,8 @@ extension VCYellow: UIViewControllerTransitioningDelegate {
     }
 }
 ```
-В ней он тщательно расписал, что при открытии нужно использовать аниматор *AnimatorPresent*, а при закрытии *AnimatorDismiss*.
-Ну и в качестве помощи обоим аниматором было решено передать фрейм главной кнопки из *VCMain*
+В ней он тщательно расписал, что для показа нужно использовать аниматор *AnimatorPresent*, а при закрытии *AnimatorDismiss*.
+Ну и в качестве помощи обоим аниматорам было решено передать фрейм главной кнопки из *VCMain*
 
 
 
@@ -65,12 +65,12 @@ extension VCYellow: UIViewControllerTransitioningDelegate {
         	self.transitioningDelegate = self
     	}
 ```
-Попросил он своего друга VCMain презентануть себя ещё разок, что бы проверить как магия сработает и… сработала она никак…
-Оказалось, что AnimatorPresent и AnimatorDismiss сами собой не появляются, а следовательно магический сеанс не состоялся.
+Попросил он своего друга *VCMain* презентануть себя, что бы проверить как магия сработает и… сработала она никак…
+Оказалось, что AnimatorPresent и AnimatorDismiss сами собой не появляются.
 
-Останавливаться было уже поздно и наш герой решил создать необходимые аниматоры. Поковырялся в нужном разделе [древних свитков](https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) и узнал, что  
+Останавливаться было уже поздно и наш герой решил создать необходимые аниматоры. Поковырялся в нужном разделе [древних свитков](https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) и узнал, что для создания аниматора достаточно двух вещей.
 
-во-первых надо задать время, отведённое на анимацию:
+во-первых надо задать время, отведённое для анимации:
 
 ```swift
 func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -85,32 +85,31 @@ func transitionDuration(using transitionContext: UIViewControllerContextTransiti
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         //1
-		guard let vcTo = transitionContext.viewController(forKey: .to),
+	guard let vcTo = transitionContext.viewController(forKey: .to),
             let snapshot = vcTo.view.snapshotView(afterScreenUpdates: true) else {
             return
         }
         
         //2
-		let vContainer = transitionContext.containerView
+	let vContainer = transitionContext.containerView
         
         //3
-		vcTo.view.isHidden = true
+	vcTo.view.isHidden = true
         vContainer.addSubview(vcTo.view)
         
         //4
-		snapshot.frame = self.startFrame
+	snapshot.frame = self.startFrame
         vContainer.addSubview(snapshot)
         
         
-        UIView.animate(withDuration: 0.3,
-                       animations: {
-            //5
-			snapshot.frame = (transitionContext.finalFrame(for: vcTo))
+        UIView.animate(withDuration: 0.3, animations: {
+		//5
+		snapshot.frame = (transitionContext.finalFrame(for: vcTo))
         }, completion: { success in
-            //6
-			vcTo.view.isHidden = false
-            snapshot.removeFromSuperview()
-            transitionContext.completeTransition(true)
+            	//6
+		vcTo.view.isHidden = false
+            	snapshot.removeFromSuperview()
+            	transitionContext.completeTransition(true)
         })
     }
 
@@ -123,11 +122,11 @@ func transitionDuration(using transitionContext: UIViewControllerContextTransiti
 Назовем её контекст.
 
 3) Нацепить вьюху конечного контроллера на контекст и скрыть её. Показать 
-её было решено после того как закончится анимация
+её было решено после того как закончится анимация.
 
 4) Подготовить фотку для анимации. Сжать до начальных размеров и кинуть на контекст.
 
-5) Расщеперить фотку на весь экран, тем самым анимировав процесс презентации
+5) Расщеперить фотку на весь экран, тем самым анимировав процесс презентации.
 	
 6) После окончания анимации показать настоящую вьюху конечного контроллера, 
 избавиться от фотки и сообщить, что действо окончено.
@@ -166,8 +165,7 @@ class AnimatorPresent: NSObject, UIViewControllerAnimatedTransitioning {
         vContainer.addSubview(snapshot)
         
         
-        UIView.animate(withDuration: 0.3,
-                       animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             snapshot.frame = (transitionContext.finalFrame(for: vcTo))
         }, completion: { success in
             vcTo.view.isHidden = false
@@ -219,13 +217,11 @@ class AnimatorDismiss: NSObject, UIViewControllerAnimatedTransitioning {
 ```
 
 
-Закончив все доделки, VCYellow опять попросил своего друга VCMain презентовать себя и о чудо! 
+Закончив все доделки, *VCYellow* опять попросил своего друга *VCMain* презентовать себя и о чудо! 
 
 ![](https://habrastorage.org/webt/ow/f1/jd/owf1jdk2uqqufbr_fzuntpwlovk.gif)
 
-Магия сработала! Мечта VCYellow сбылась и жизнь его никогда не будет прежней :)
-
-Конец.
+Магия сработала! Мечта *VCYellow* сбылась! Теперь он может показываться и скрываться как ему захочется.
 
 Проект-пример можно скачать [тут](https://github.com/funkydevil/customTransition)
 
