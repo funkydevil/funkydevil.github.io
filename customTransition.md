@@ -9,7 +9,6 @@ class VCMain: UIViewController {
 ...
 	@IBAction func onBtnTapMeTapped(_ sender: Any) {
         let vcYellow = self.storyboard!.instantiateViewController(withIdentifier: "VCYellow") as! VCYellow
-        vcYellow.startFrame = self.btnTapMe.frame;
         self.present(vcYellow, animated: true, completion: nil)
     }
 ```
