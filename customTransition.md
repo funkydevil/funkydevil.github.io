@@ -8,9 +8,9 @@
 class VCMain: UIViewController {
 ...
 	@IBAction func onBtnTapMeTapped(_ sender: Any) {
-        let vcYellow = self.storyboard!.instantiateViewController(withIdentifier: "VCYellow") as! VCYellow
-        self.present(vcYellow, animated: true, completion: nil)
-    }
+        	let vcYellow = self.storyboard!.instantiateViewController(withIdentifier: "VCYellow") as! VCYellow
+        	self.present(vcYellow, animated: true, completion: nil)
+    	}
 ```
 А *VCYellow* в свою очередь скрывался при помощи единственной кнопки "X", которой он, кстати говоря, очень гордился:
 
@@ -18,8 +18,8 @@ class VCMain: UIViewController {
 class VCYellow: UIViewController {
 ...
 	@IBAction func onBtnCloseTapped(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
+        	self.dismiss(animated: true, completion: nil)
+    	}
 ```
 
 И выглядело это не то чтобы плохо, но скучно и обыденно:
@@ -58,12 +58,12 @@ extension VCYellow: UIViewControllerTransitioningDelegate {
 
 А потом и сам морально настроился. Потому как без правильного настроя, как известно, никакая магия не работает:
 ```swift
-override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewDidLoad() {
+        	super.viewDidLoad()
         
-        self.modalPresentationStyle = .custom
-        self.transitioningDelegate = self
-    }
+        	self.modalPresentationStyle = .custom
+        	self.transitioningDelegate = self
+    	}
 ```
 Попросил он своего друга VCMain презентануть себя ещё разок, что бы проверить как магия сработает и… сработала она никак…
 Оказалось, что AnimatorPresent и AnimatorDismiss сами собой не появляются, а следовательно магический сеанс не состоялся.
