@@ -210,7 +210,7 @@ transitionContext.completeTransition(true)
 
 ![](https://habrastorage.org/webt/ow/f1/jd/owf1jdk2uqqufbr_fzuntpwlovk.gif)
 
-Магия сработала! Мечта *VCYellow* сбылась! Теперь он может показываться и скрываться как ему захочется.
+Магия сработала! Мечта *VCYellow* сбылась! Теперь он может показываться и скрываться как ему захочется и ничто не будет ограничивать его фантазию!
 
 Проект-пример можно скачать [тут](https://github.com/funkydevil/customTransition)
 
