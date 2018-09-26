@@ -1,14 +1,15 @@
 # ИСТОРИЯ ВЬЮ-КОНТРОЛЛЕРА, КОТОРЫЙ ХОТЕЛ ПОКАЗЫВАТЬСЯ КРАСИВО
 
 Жил был скромный вью-контроллер *VCYellow*. И не было у него ни картинки, ни текста, ни даже малюсенькой бизнес логики. Жил он обычной вью-контроллерской жизнью.
+<cut />
 Его товарищ вью-контроллер *VCMain* иногда презентовал его миру:
 
 ```swift
 class VCMain: UIViewController {
 ...
 @IBAction func onBtnTapMeTapped(_ sender: Any) {
-let vcYellow = self.storyboard!.instantiateViewController(withIdentifier: "VCYellow") as! VCYellow
-self.present(vcYellow, animated: true, completion: nil)
+    let vcYellow = self.storyboard!.instantiateViewController(withIdentifier: "VCYellow") as! VCYellow
+    self.present(vcYellow, animated: true, completion: nil)
 }
 ```
 А *VCYellow* в свою очередь скрывался при помощи единственной кнопки "X", которой он, кстати говоря, очень гордился:
@@ -17,17 +18,17 @@ self.present(vcYellow, animated: true, completion: nil)
 class VCYellow: UIViewController {
 ...
 @IBAction func onBtnCloseTapped(_ sender: Any) {
-self.dismiss(animated: true, completion: nil)
+    self.dismiss(animated: true, completion: nil)
 }
 ```
 
 И выглядело это не то чтобы плохо, но скучно и обыденно:
 
-![](https://habrastorage.org/webt/fb/lf/op/fblfopvr4h0lp2dyltbjqhled64.gif)
+![](https://habrastorage.org/webt/wk/tl/b4/wktlb4m-hcmjrf8_qpvycz9p0eg.gif)
 
 Но была у нашего героя мечта научиться показываться и скрываться по-красоте. Да так, чтобы можно было эту красоту менять потом по праздникам или просто в честь хорошего настроения.
 
-![](https://habrastorage.org/webt/ow/f1/jd/owf1jdk2uqqufbr_fzuntpwlovk.gif)
+![](https://habrastorage.org/webt/ev/c7/oz/evc7ozq2dgznnwbm0h9mry7brko.gif)
 
 Шли года... и так и осталась бы мечта мечтой, если бы не узнал *VCYellow* о магии под названием:
 ```
@@ -39,13 +40,13 @@ UIViewControllerTransitioningDelegate
 
 ```swift
 extension VCYellow: UIViewControllerTransitioningDelegate {
-func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-return AnimatorPresent(startFrame: self.startFrame)
-}
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return AnimatorPresent(startFrame: self.startFrame)
+    }
 
-func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-return AnimatorDismiss(endFrame: self.startFrame)
-}
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return AnimatorDismiss(endFrame: self.startFrame)
+    }
 }
 ```
 В ней он тщательно расписал, что для показа нужно использовать аниматор *AnimatorPresent*, а при закрытии *AnimatorDismiss*.
@@ -54,10 +55,9 @@ return AnimatorDismiss(endFrame: self.startFrame)
 А потом и сам морально настроился. Потому как без правильного настроя, как известно, никакая магия не работает:
 ```swift
 override func viewDidLoad() {
-super.viewDidLoad()
-
-self.modalPresentationStyle = .custom
-self.transitioningDelegate = self
+    super.viewDidLoad()
+    self.modalPresentationStyle = .custom
+    self.transitioningDelegate = self
 }
 ```
 Попросил он своего друга *VCMain* презентануть себя, чтобы проверить как магия сработает и… сработала она никак…
@@ -69,7 +69,7 @@ self.transitioningDelegate = self
 
 ```swift
 func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-return 0.3
+    return 0.3
 }
 ```
 
@@ -78,38 +78,37 @@ return 0.3
 ```swift
 
 func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-//1
-guard let vcTo = transitionContext.viewController(forKey: .to),
-let snapshot = vcTo.view.snapshotView(afterScreenUpdates: true) else {
-return
-}
+    //1
+    guard let vcTo = transitionContext.viewController(forKey: .to),
+        let snapshot = vcTo.view.snapshotView(afterScreenUpdates: true) else {
+        return
+    }
 
-//2
-let vContainer = transitionContext.containerView
+    //2
+    let vContainer = transitionContext.containerView
 
-//3
-vcTo.view.isHidden = true
-vContainer.addSubview(vcTo.view)
+    //3
+    vcTo.view.isHidden = true
+    vContainer.addSubview(vcTo.view)
 
-//4
-snapshot.frame = self.startFrame
-vContainer.addSubview(snapshot)
+    //4
+    snapshot.frame = self.startFrame
+    vContainer.addSubview(snapshot)
 
-UIView.animate(withDuration: 0.3, animations: {
-//5
-snapshot.frame = (transitionContext.finalFrame(for: vcTo))
-}, completion: { success in
-//6
-vcTo.view.isHidden = false
-snapshot.removeFromSuperview()
-transitionContext.completeTransition(true)
-})
+    UIView.animate(withDuration: 0.3, animations: {
+        //5
+        snapshot.frame = (transitionContext.finalFrame(for: vcTo))
+    }, completion: { success in
+        //6
+        vcTo.view.isHidden = false
+        snapshot.removeFromSuperview()
+        transitionContext.completeTransition(true)
+    })
 }
 
 ```
 
-1) вытащить презентуемый вью-контроллер(в нашем случае VCYellow) и сфоткать его. Фотка нужна для
-крутой анимации.
+1) вытащить презентуемый вью-контроллер(в нашем случае VCYellow) и сфоткать его. Фотка нужна для упрощения анимации.
 
 2) Получить вьюшку, на которой будет происходить анимационное колдунство.
 Назовем её контекст.
@@ -130,85 +129,83 @@ transitionContext.completeTransition(true)
 import UIKit
 
 class AnimatorPresent: NSObject, UIViewControllerAnimatedTransitioning {
+    let startFrame: CGRect
+    
+    init(startFrame: CGRect) {
+        self.startFrame = startFrame
+    }
 
-let startFrame: CGRect
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return 0.3
+    }
 
-init(startFrame: CGRect) {
-self.startFrame = startFrame
-}
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        guard let vcTo = transitionContext.viewController(forKey: .to),
+        let snapshot = vcTo.view.snapshotView(afterScreenUpdates: true) else {
+            return
+        }
 
-func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-return 0.3
-}
+        let vContainer = transitionContext.containerView
 
-func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-guard let vcTo = transitionContext.viewController(forKey: .to),
-let snapshot = vcTo.view.snapshotView(afterScreenUpdates: true) else {
-return
-}
+        vcTo.view.isHidden = true
+        vContainer.addSubview(vcTo.view)
 
-let vContainer = transitionContext.containerView
+        snapshot.frame = self.startFrame
+        vContainer.addSubview(snapshot)
 
-vcTo.view.isHidden = true
-vContainer.addSubview(vcTo.view)
-
-snapshot.frame = self.startFrame
-vContainer.addSubview(snapshot)
-
-UIView.animate(withDuration: 0.3, animations: {
-snapshot.frame = (transitionContext.finalFrame(for: vcTo))
-}, completion: { success in
-vcTo.view.isHidden = false
-snapshot.removeFromSuperview()
-transitionContext.completeTransition(true)
-})
-}
+        UIView.animate(withDuration: 0.3, animations: {
+            snapshot.frame = (transitionContext.finalFrame(for: vcTo))
+        }, completion: { success in
+            vcTo.view.isHidden = false
+            snapshot.removeFromSuperview()
+            transitionContext.completeTransition(true)
+        })
+    }
 }
 ```
 
-А после этого несложно было описать аниматор для скрывания, который делает примерно то же самое, но наоборот:
+А после этого несложно было написать аниматор для скрывания, который делает примерно то же самое, но наоборот:
 
 ```swift
 import UIKit
 
 class AnimatorDismiss: NSObject, UIViewControllerAnimatedTransitioning {
 
-let endFrame: CGRect
+    let endFrame: CGRect
 
-init(endFrame: CGRect) {
-self.endFrame = endFrame
-}
+    init(endFrame: CGRect) {
+        self.endFrame = endFrame
+    }
 
-func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-return 0.3
-}
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return 0.3
+    }
 
-func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-guard let vcTo = transitionContext.viewController(forKey: .to),
-let vcFrom = transitionContext.viewController(forKey: .from),
-let snapshot = vcFrom.view.snapshotView(afterScreenUpdates: true) else {
-return
-}
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        guard let vcTo = transitionContext.viewController(forKey: .to),
+        let vcFrom = transitionContext.viewController(forKey: .from),
+        let snapshot = vcFrom.view.snapshotView(afterScreenUpdates: true) else {
+            return
+        }
 
-let vContainer = transitionContext.containerView
-vContainer.addSubview(vcTo.view)
-vContainer.addSubview(snapshot)
+        let vContainer = transitionContext.containerView
+        vContainer.addSubview(vcTo.view)
+        vContainer.addSubview(snapshot)
 
-vcFrom.view.isHidden = true
+        vcFrom.view.isHidden = true
 
-UIView.animate(withDuration: 0.3,
-animations: {
-snapshot.frame = self.endFrame
-}, completion: { success in
-transitionContext.completeTransition(true)
-})
-}
+        UIView.animate(withDuration: 0.3, animations: {
+            snapshot.frame = self.endFrame
+        }, completion: { success in
+            transitionContext.completeTransition(true)
+        })
+    }
 }
 ```
 
 Закончив все доделки, *VCYellow* опять попросил своего друга *VCMain* презентовать себя и о чудо!
 
-![](https://habrastorage.org/webt/ow/f1/jd/owf1jdk2uqqufbr_fzuntpwlovk.gif)
+![](https://habrastorage.org/webt/ev/c7/oz/evc7ozq2dgznnwbm0h9mry7brko.gif)
 
 Магия сработала! Мечта *VCYellow* сбылась! Теперь он может показываться и скрываться как ему захочется и ничто не будет ограничивать его фантазию!
 
